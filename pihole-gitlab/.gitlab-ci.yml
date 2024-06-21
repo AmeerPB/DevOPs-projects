@@ -1,0 +1,56 @@
+variables:
+  IMAGE_NAME: openrc/demo-pihole
+  IMAGE_TAG: v1
+  WEBSERVER_USER: ubuntu 
+  WEBSERVER_IP: 3.136.106.246
+  GIT_REPO: https://github.com/AmeerPB/pihole-gitlab
+
+stages:
+  - clone
+  - build
+  - deploy
+
+
+clone_repo:
+  stage: clone
+  before_script:
+    - chmod 400 $SSH_KEY
+  script:
+  - ssh -o StrictHostKeyChecking=no -i $SSH_KEY $WEBSERVER_USER@$WEBSERVER_IP "
+      git clone $GIT_REPO"
+
+build_image:
+  stage: build
+  image: docker:26.1.4
+  services:
+    - docker:26.1.4-dind
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  before_script:
+    - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
+  script:
+    - docker build -t $IMAGE_NAME:$IMAGE_TAG .
+    - docker push $IMAGE_NAME:$IMAGE_TAG
+
+
+deploy:
+  stage: deploy
+  before_script:
+    - chmod 400 $SSH_KEY
+  script:
+    - ssh -o StrictHostKeyChecking=no -i $SSH_KEY $WEBSERVER_USER@$WEBSERVER_IP "
+        docker login -u $REGISTRY_USER -p $REGISTRY_PASS &&
+        docker ps -aq | xargs docker stop | xargs docker rm &&
+        docker run -d -p 8070:80 $IMAGE_NAME:$IMAGE_TAG --name demo-pihole \
+        -p 53:53/tcp -p 53:53/udp \
+        -p 8070:80 \
+        -e TZ="America/Chicago" \
+        -v "${PIHOLE_BASE}/etc-pihole:/etc/pihole" \
+        -v "${PIHOLE_BASE}/etc-dnsmasq.d:/etc/dnsmasq.d" \
+        --dns=127.0.0.1 --dns=1.1.1.1 \
+        --restart=unless-stopped \
+        --hostname pi.hole \
+        -e VIRTUAL_HOST="pi.hole" \
+        -e PROXY_LOCATION="pi.hole" \
+        -e FTLCONF_LOCAL_IPV4="127.0.0.1" \
+        pihole/pihole:latest"

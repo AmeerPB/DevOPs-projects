@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-nodejs-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: simple-nodejs-app
+  template:
+    metadata:
+      labels:
+        app: simple-nodejs-app
+    spec:
+      containers:
+      - name: simple-nodejs-app
+        image: openrc/simple-nodejs-app:latest
+        ports:
+        - containerPort: 31000
+

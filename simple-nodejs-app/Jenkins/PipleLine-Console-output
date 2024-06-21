@@ -1,0 +1,186 @@
+Started by user admin
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/lib/jenkins/workspace/nodejs-pipleine-2
+[Pipeline] {
+[Pipeline] withCredentials
+Masking supported pattern matches of $K8S_MASTER_NODE_USER or $DOCKERHUB_CREDENTIALS or $K8S_MASTER_NODE
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Clone Repository on Docker Server)
+[Pipeline] withCredentials
+Masking supported pattern matches of $DOCKERHUB_USERNAME
+[Pipeline] {
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
+Warning: A secret was passed to "sh" using Groovy String interpolation, which is insecure.
+		 Affected argument(s) used the following variable(s): [K8S_MASTER_NODE_USER]
+		 See https://jenkins.io/redirect/groovy-string-interpolation for details.
++ ssh -o StrictHostKeyChecking=no ****@13.59.191.178 
+                        if [ -d "simple-nodejs-app" ]; then
+                            rm -rf simple-nodejs-app
+                        fi
+                        git clone https://github.com/AmeerPB/simple-nodejs-app
+                        
+Cloning into 'simple-nodejs-app'...
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build Docker Image)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
+Warning: A secret was passed to "sh" using Groovy String interpolation, which is insecure.
+		 Affected argument(s) used the following variable(s): [K8S_MASTER_NODE_USER]
+		 See https://jenkins.io/redirect/groovy-string-interpolation for details.
++ ssh -o StrictHostKeyChecking=no ****@13.59.191.178 
+                    cd simple-nodejs-app &&
+                    sudo docker build -t DOCKERHUB_USERNAME/simple-nodejs-app:latest .
+                    
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 160B done
+#1 DONE 0.0s
+
+#2 [auth] library/node:pull token for registry-1.docker.io
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/node:22-alpine
+#3 DONE 0.2s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 2B done
+#4 DONE 0.0s
+
+#5 [1/5] FROM docker.io/library/node:22-alpine@sha256:df46071ae175bc2c0468ae58e32f00ed6c9779eb70112cdf0d2ccf85035bc7ff
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 2.61MB 0.1s done
+#6 DONE 0.1s
+
+#7 [3/5] COPY package*.json ./
+#7 CACHED
+
+#8 [2/5] WORKDIR /app
+#8 CACHED
+
+#9 [4/5] RUN npm install
+#9 CACHED
+
+#10 [5/5] COPY . .
+#10 DONE 0.1s
+
+#11 exporting to image
+#11 exporting layers 0.0s done
+#11 writing image sha256:fa021c861b40b32173b807d0359e9cd7ec0c56ba963d1f079712ae4e562dc1ca done
+#11 naming to docker.io/DOCKERHUB_USERNAME/simple-nodejs-app:latest done
+#11 DONE 0.1s
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Push Docker Image)
+[Pipeline] withCredentials
+Masking supported pattern matches of $DOCKERHUB_PASSWORD
+[Pipeline] {
+[Pipeline] script
+[Pipeline] {
+[Pipeline] sh
+Warning: A secret was passed to "sh" using Groovy String interpolation, which is insecure.
+		 Affected argument(s) used the following variable(s): [K8S_MASTER_NODE_USER]
+		 See https://jenkins.io/redirect/groovy-string-interpolation for details.
++ ssh -o StrictHostKeyChecking=no ****@DOCKER_SERVER 
+                        sudo docker login -u DOCKERHUB_USERNAME -p ${DOCKERHUB_PASSWORD}
+                        sudo docker push DOCKERHUB_USERNAME/simple-nodejs-app
+                        
+flag needs an argument: 'p' in -p
+See 'docker login --help'.
+Using default tag: latest
+The push refers to repository [docker.io/DOCKERHUB_USERNAME/simple-nodejs-app]
+55a69b7f1f06: Preparing
+51a1bcc09bb4: Preparing
+9c1921afe25e: Preparing
+c71efb69e639: Preparing
+036df71f77d1: Preparing
+f85db7009cb4: Preparing
+17209bc16535: Preparing
+02f2bcb26af5: Preparing
+f85db7009cb4: Waiting
+17209bc16535: Waiting
+02f2bcb26af5: Waiting
+c71efb69e639: Layer already exists
+51a1bcc09bb4: Layer already exists
+9c1921afe25e: Layer already exists
+036df71f77d1: Layer already exists
+17209bc16535: Layer already exists
+02f2bcb26af5: Layer already exists
+f85db7009cb4: Layer already exists
+55a69b7f1f06: Pushed
+latest: digest: sha256:1ad16fe07b8f29ed4cae9541f705493cfd894971e8eaa6318d616061845fdbbb size: 1995
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy to Kubernetes)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] withKubeCredentials
+[Pipeline] {
+[Pipeline] sshagent
+[ssh-agent] Using credentials **** (KubeADM K8s Master)
+[ssh-agent] Looking for ssh-agent implementation...
+[ssh-agent]   Exec ssh-agent (binary ssh-agent on a remote machine)
+$ ssh-agent
+SSH_AUTH_SOCK=/tmp/ssh-XXXXXXo3m5rZ/agent.51869
+SSH_AGENT_PID=51872
+Running ssh-add (command line suppressed)
+Identity added: /var/lib/jenkins/workspace/nodejs-pipleine-2@tmp/private_key_12398770407119313748.key (/var/lib/jenkins/workspace/nodejs-pipleine-2@tmp/private_key_12398770407119313748.key)
+[ssh-agent] Started.
+[Pipeline] {
+[Pipeline] sh
+Warning: A secret was passed to "sh" using Groovy String interpolation, which is insecure.
+		 Affected argument(s) used the following variable(s): [K8S_MASTER_NODE_USER, K8S_MASTER_NODE]
+		 See https://jenkins.io/redirect/groovy-string-interpolation for details.
++ ssh -o StrictHostKeyChecking=no ****@**** 
+							sudo kubectl create deployment nodejs --image=DOCKERHUB_USERNAME/simple-nodejs-app:latest --port=31000 --replicas=2
+							sudo kubectl expose deployment nodejs --type=NodePort --port=32000 --target-port=31000 --name=nodejs-service
+                            
+deployment.apps/nodejs created
+service/nodejs-service exposed
+[Pipeline] }
+$ ssh-agent -k
+unset SSH_AUTH_SOCK;
+unset SSH_AGENT_PID;
+echo Agent pid 51872 killed;
+[ssh-agent] Stopped.
+[Pipeline] // sshagent
+[Pipeline] }
+[kubernetes-cli] kubectl configuration cleaned up
+[Pipeline] // withKubeCredentials
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
+
+REST API

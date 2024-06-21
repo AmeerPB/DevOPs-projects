@@ -1,0 +1,78 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhubjenkinspwd')
+        DOCKERHUB_USERNAME = 'dockerhubusername'
+        DOCKER_IMAGE = 'openrc/simple-nodejs-app'
+        REPO_URL = 'https://github.com/AmeerPB/simple-nodejs-app'
+        DOCKER_SERVER = 'dockerserverip'
+        K8S_MASTER_NODE = credentials('k8smasternode')
+        K8S_MASTER_NODE_USER = credentials('k8smasternodeuser')
+    }
+
+    stages {
+        stage('Clone Repository on Docker Server') {
+            steps {
+                withCredentials([string(credentialsId: 'dockerhubusername', variable: 'DOCKERHUB_USERNAME')]) {
+                    script {
+                        sh """
+                        ssh -o StrictHostKeyChecking=no ubuntu@${DOCKER_SERVER} '
+                        if [ -d "simple-nodejs-app" ]; then
+                            rm -rf simple-nodejs-app
+                        fi
+                        git clone ${REPO_URL}
+                        '
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh """
+                    ssh -o StrictHostKeyChecking=no ubuntu@${DOCKER_SERVER} '
+                    cd simple-nodejs-app &&
+                    sudo docker build -t ${DOCKER_IMAGE}:latest .
+                    '
+                    """
+                }
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                withCredentials([string(credentialsId: 'dockerhubjenkinspwd', variable: 'DOCKERHUB_PASSWORD')]) {
+                    script {
+                        sh """
+                        ssh -o StrictHostKeyChecking=no ubuntu@${DOCKER_SERVER} '
+                        sudo docker login -u openrc -p \${DOCKERHUB_PASSWORD}
+                        sudo docker push ${DOCKER_IMAGE}
+                        '
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'SECRET_TOKEN', namespace: 'Default', serverUrl: 'https://172.31.16.216:6443']]) {
+                        sshagent(['k8s-kueadm-master']) {
+                            sh """
+                            ssh -o StrictHostKeyChecking=no ${K8S_MASTER_NODE_USER}@${K8S_MASTER_NODE} '
+							sudo kubectl create deployment nodejs --image=openrc/simple-nodejs-app:latest --port=31000 --replicas=2
+							sudo kubectl expose deployment nodejs --type=NodePort --port=32000 --target-port=31000 --name=nodejs-service
+                            '
+                            """
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
