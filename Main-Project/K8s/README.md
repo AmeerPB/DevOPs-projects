@@ -1,6 +1,14 @@
-# Steps to configure K8s on AWS with Kubeadm
+## Steps to configure K8s on AWS with Kubeadm
 
-# Reference
+
+> [!NOTE]
+> Master and worker needs a minimum of 2 GB RAM
+
+
+
+
+
+### Reference
 [Installing kubeadm in Linux](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
 
 Complete Setup [Video](https://www.youtube.com/watch?v=UbiVOMkXjr8&t=1s) from YT
