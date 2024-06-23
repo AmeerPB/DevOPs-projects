@@ -33,7 +33,7 @@ Complete Setup [Video](https://www.youtube.com/watch?v=UbiVOMkXjr8&t=1s) from YT
 
 
 > [!CAUTION]
-# Steps (from previos installation)
+> ### Steps (from previos installation)
 
 
 `sudo apt-get update`
