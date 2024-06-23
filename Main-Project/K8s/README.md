@@ -57,8 +57,20 @@ sudo systemctl enable --now kubelet
 
 kubeadm init --pod-network-cidr=192.168.0.0/16
 
-kubeadm init --pod-network-cidr=192.168.0.0/16 --cri-socket=unix:///var/run/cri-dockerd.sock
 ```
+
+This command results an error about CRI runtime. Hence run the command with adding runtime flag
+
+> root@Master % kubeadm init --pod-network-cidr=192.168.0.0/16
+> Found multiple CRI endpoints on the host. Please define which one do you wish to use by setting the 'criSocket' field in the kubeadm configuration file: unix:///var/run/containerd/containerd.sock, unix:///var/run/cri-dockerd.sock
+> To see the stack trace of this error execute with --v=5 or higher
+
+`kubeadm init --pod-network-cidr=192.168.0.0/16 --cri-socket=unix:///var/run/cri-dockerd.sock`
+
+
+
+
+
 > then, run the stesp mentioned in the output
 ```
 mkdir -p $HOME/.kube
@@ -70,14 +82,13 @@ mkdir -p $HOME/.kube
 
 
 
-> root@Master % kubeadm init --pod-network-cidr=192.168.0.0/16
-> Found multiple CRI endpoints on the host. Please define which one do you wish to use by setting the 'criSocket' field in the kubeadm configuration file: unix:///var/run/containerd/containerd.sock, unix:///var/run/cri-dockerd.sock
-> To see the stack trace of this error execute with --v=5 or higher
-
-`kubeadm init --pod-network-cidr=192.168.0.0/16 --cri-socket=unix:///var/run/cri-dockerd.sock`
 
 
 
+
+
+> [!NOTE]
+> Only for Master node
 
 # Install Calico
 
@@ -105,6 +116,9 @@ kubectl get pods -n kube-system
 > use sudo when running and add --cri-socket= if necessary
 
 
+> [!NOTE]
+> Only for worker node's
+
 > root@Worker-1 % kubeadm join 172.31.16.216:6443 --token lh26qj.557l2heit3uq28oi --discovery-token-ca-cert-hash sha256:ba25b7f932ca12f8de9b4afd94daaa755de4af70956c30dbbd02ff14353f6293 --cri-socket=unix:///var/run/cri-dockerd.sock
 > [preflight] Running pre-flight checks
 > [preflight] Reading configuration from the cluster...
@@ -119,6 +133,10 @@ kubectl get pods -n kube-system
 > This node has joined the cluster:
 > * Certificate signing request was sent to apiserver and a response was received.
 > * The Kubelet was informed of the new secure connection details.
+
+
+> [!NOTE]
+> From Master node
 
 > Run 'kubectl get nodes' on the control-plane to see this node join the cluster.
 
