@@ -4,10 +4,10 @@
 ## Using HELM chart's with custom values.yml file as input
 
 values.yml file locaation: 
-https://github.com/techno-tim/launchpad/tree/master/kubernetes/kube-prometheus-stack
+// https://github.com/techno-tim/launchpad/tree/master/kubernetes/kube-prometheus-stack
 
 ## Helm repo command
-**helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+// helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 
 
 ## Installation notes
@@ -15,7 +15,7 @@ https://github.com/techno-tim/launchpad/tree/master/kubernetes/kube-prometheus-s
 use "--debug" when running the below command 
 
 
-**helm install -n monitoring prometheus prometheus-community/kube-prometheus-stack -f values.yaml
+// helm install -n monitoring prometheus prometheus-community/kube-prometheus-stack -f values.yaml
 
 
 
