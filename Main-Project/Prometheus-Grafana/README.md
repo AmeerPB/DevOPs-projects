@@ -10,7 +10,7 @@ https://github.com/techno-tim/launchpad/tree/master/kubernetes/kube-prometheus-s
 **helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 
 
-# Installation notes
+## Installation notes
 
 use "--debug" when running the below command 
 
@@ -19,10 +19,10 @@ use "--debug" when running the below command
 
 
 
-# Reference 
+## Reference 
 Techno Tim YT --> https://www.youtube.com/watch?v=fzny5uUaAeY
 
-# YT Video  Notes
+## YT Video  Notes
 https://technotim.live/posts/kube-grafana-prometheus/
 
 
