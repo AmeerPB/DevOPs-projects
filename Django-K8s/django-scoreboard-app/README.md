@@ -1,4 +1,4 @@
-# ADjango hellow rold and Scoreboard web application
+# A Django hello world and Scoreboard web application
 
 Needs to run a few commands, for that please refer the YT video mentioned below. 
 
