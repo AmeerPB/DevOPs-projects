@@ -12,7 +12,7 @@ Mentioned docker image can be pull from `openrc/django-hello-world-scoreboard:la
 # Reference
 [YT video](https://www.youtube.com/watch?v=8K52HRoA4Sc) about deploying this Django web app
 
-### This video forked from [django-crud](https://github.com/tonyflo/django-crud.git)
+### This project forked from [django-crud](https://github.com/tonyflo/django-crud.git)
 
 
 
