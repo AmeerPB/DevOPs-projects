@@ -6,6 +6,34 @@
 Complete Setup [Video](https://www.youtube.com/watch?v=UbiVOMkXjr8&t=1s) from YT
 
 
+> [!TIP]
+
+# Steps (Which is working)
+
++ Install Docker Engine
+  + on [Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
++ Install CRI runtime 
+  + [cri-dockerd](https://mirantis.github.io/cri-dockerd/usage/install/)
+  + Download the deb file corresponding to the distro release version
+  + Eg: cri-dockerd_0.3.14.3-0.ubuntu-jammy_amd64.deb
+  + sudo dpkg -i cri-dockerd_0.3.14.3-0.ubuntu-jammy_amd64.deb
++ Install kubeadm, kubelet and kubectl
+  + Official documentation for [Ubuntu](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+> [!CAUTION]
 # Steps (from previos installation)
 
 
