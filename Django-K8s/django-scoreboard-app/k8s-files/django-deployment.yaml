@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: django-deployment
-  namespace: default   
+  name: django-hello-world
+  namespace: testing
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: django
+      app: django-hello-world
   template:
     metadata:
       labels:
-        app: django
+        app: django-hello-world
     spec:
       containers:
-      - name: django
-        image: openrc/django-docker
+      - name: django-hello-world
+        image: openrc/django-hello-world-scoreboard:latest
         ports:
-        - containerPort: 8080
+        - containerPort: 8000
