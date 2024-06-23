@@ -95,7 +95,7 @@ kubectl apply -f calico.yaml
 
 
 > [!CAUTION]
-> ### Steps (from previos installation)
+> ### Steps (from previous installation)
 
 
 `sudo apt-get update`
