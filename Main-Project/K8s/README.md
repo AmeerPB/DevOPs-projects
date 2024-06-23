@@ -18,12 +18,72 @@ Complete Setup [Video](https://www.youtube.com/watch?v=UbiVOMkXjr8&t=1s) from YT
   + sudo dpkg -i cri-dockerd_0.3.14.3-0.ubuntu-jammy_amd64.deb
 + Install kubeadm, kubelet and kubectl
   + Official documentation for [Ubuntu](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
++ Install Calico on Master node
+  + Officila [documentation](https://docs.tigera.io/calico/latest/getting-started/kubernetes/self-managed-onprem/onpremises)
+
+
+
+
+### Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+### Add the repository to Apt sources:
+```
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-compose -y
+
+```
+
+[containerd](https://github.com/Mirantis/cri-dockerd/releases)
+
+
+`wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.14/cri-dockerd_0.3.14.3-0.ubuntu-jammy_amd64.deb`
+`dpkg -i cri-dockerd_0.3.14.3-0.ubuntu-jammy_amd64.deb`
+
+
+### Install kubeadm, kubelet and kubectl
+
+
+
+```
+sudo apt-get update
+sudo apt-get install -y apt-transport-https ca-certificates curl gpg
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+sudo systemctl enable --now kubelet
+
+```
+
+
+`kubeadm init --pod-network-cidr=192.168.0.0/16 --cri-socket=unix:///var/run/cri-dockerd.sock`
 
 
 
 
 
+### Install Calico on Master node
 
+Select the **Manifest** tab
+
+```
+curl https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/calico.yaml -O
+kubectl apply -f calico.yaml
+
+
+```
 
 
 
