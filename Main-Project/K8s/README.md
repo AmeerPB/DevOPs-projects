@@ -75,13 +75,19 @@ sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
 sudo systemctl enable --now kubelet
 
+kubeadm init --pod-network-cidr=192.168.0.0/16 --cri-socket=unix:///var/run/cri-dockerd.sock
+
 ```
 
 
-`kubeadm init --pod-network-cidr=192.168.0.0/16 --cri-socket=unix:///var/run/cri-dockerd.sock`
+Then run
 
+```
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-
+```
 
 
 ### Install Calico on Master node
@@ -95,8 +101,14 @@ kubectl apply -f calico.yaml
 
 ```
 
+> [!NOTE]
+> To join the Cluster, run the below command from the worker node
+
+```
+Worker1 % kubeadm join 172.31.29.0:6443 --token 4kzd4s.jhsgkfjagskeykhfjj --discovery-token-ca-cert-hash sha256:f666d66a64e529397434801d3e964ac9bcb01746853746583476583468  --cri-socket=unix:///var/run/cri-dockerd.sock
 
 
+```
 
 
 
@@ -160,7 +172,7 @@ mkdir -p $HOME/.kube
 > [!NOTE]
 > Only for Master node
 
-# Install Calico
+### Install Calico
 
 Oficila Calico installation reference [URL](https://docs.tigera.io/calico/latest/getting-started/kubernetes/self-managed-onprem/onpremises)
 
@@ -216,7 +228,7 @@ kubectl get pods -n kube-system
 
 
 
-# Testing deployment after the installation
+### Testing deployment after the installation
 
 ```
 
