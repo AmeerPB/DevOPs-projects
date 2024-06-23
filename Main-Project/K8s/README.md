@@ -6,7 +6,7 @@
 Complete Setup [Video](https://www.youtube.com/watch?v=UbiVOMkXjr8&t=1s) from YT
 
 
-> [!TIP]
+[!TIP]
 
 # Steps (Which is working)
 
