@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-additional-scrape-configs
+  namespace: monitoring
+data:
+  additional-scrape-configs.yaml: 
+    - job_name: "worker_node"
+      static_configs:
+        - targets: ["52.14.138.83:9100"]

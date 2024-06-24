@@ -1,0 +1,156 @@
+USER-SUPPLIED VALUES:
+alertmanager:
+  enabled: true
+  fullnameOverride: alertmanager
+  ingress:
+    enabled: false
+coreDns:
+  enabled: true
+defaultRules:
+  create: true
+  rules:
+    alertmanager: true
+    configReloaders: true
+    etcd: true
+    general: true
+    k8s: true
+    kubeApiserverAvailability: true
+    kubeApiserverBurnrate: true
+    kubeApiserverHistogram: true
+    kubeApiserverSlos: true
+    kubePrometheusGeneral: true
+    kubePrometheusNodeRecording: true
+    kubeProxy: true
+    kubeScheduler: true
+    kubeStateMetrics: true
+    kubelet: true
+    kubernetesApps: true
+    kubernetesResources: true
+    kubernetesStorage: true
+    kubernetesSystem: true
+    network: true
+    node: true
+    nodeExporterAlerting: true
+    nodeExporterRecording: true
+    prometheus: true
+    prometheusOperator: true
+fullnameOverride: prometheus
+grafana:
+  admin:
+    existingSecret: grafana-admin-credentials
+    passwordKey: admin-password
+    userKey: admin-user
+  defaultDashboardsEnabled: true
+  defaultDashboardsTimezone: utc
+  enabled: true
+  forceDeployDashboards: false
+  forceDeployDatasources: false
+  fullnameOverride: grafana
+  serviceMonitor:
+    enabled: true
+kube-state-metrics:
+  fullnameOverride: kube-state-metrics
+  prometheus:
+    monitor:
+      enabled: true
+      relabelings:
+      - action: replace
+        regex: (.*)
+        replacement: $1
+        sourceLabels:
+        - __meta_kubernetes_pod_node_name
+        targetLabel: kubernetes_node
+  selfMonitor:
+    enabled: true
+kubeApiServer:
+  enabled: true
+kubeControllerManager:
+  enabled: true
+  endpoints:
+  - 172.31.29.0
+kubeDns:
+  enabled: false
+kubeEtcd:
+  enabled: true
+  endpoints:
+  - 172.31.29.0
+  service:
+    enabled: true
+    port: 2381
+    targetPort: 2381
+kubeProxy:
+  enabled: true
+  endpoints:
+  - 172.31.29.0
+kubeScheduler:
+  enabled: true
+  endpoints:
+  - 172.31.29.0
+kubeStateMetrics:
+  enabled: true
+kubelet:
+  enabled: true
+  serviceMonitor:
+    metricRelabelings:
+    - action: replace
+      sourceLabels:
+      - node
+      targetLabel: instance
+nodeExporter:
+  enabled: true
+  serviceMonitor:
+    relabelings:
+    - action: replace
+      regex: (.*)
+      replacement: $1
+      sourceLabels:
+      - __meta_kubernetes_pod_node_name
+      targetLabel: kubernetes_node
+prometheus:
+  enabled: true
+  prometheusSpec:
+    enableAdminAPI: true
+    podMonitorSelectorNilUsesHelmValues: false
+    probeSelectorNilUsesHelmValues: false
+    replicaExternalLabelName: replica
+    replicas: 1
+    retention: 6h
+    ruleSelectorNilUsesHelmValues: false
+    serviceMonitorSelectorNilUsesHelmValues: false
+    walCompression: true
+prometheus-node-exporter:
+  extraArgs:
+  - --collector.filesystem.mount-points-exclude=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/.+)($|/)
+  - --collector.filesystem.fs-types-exclude=^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs)$
+  fullnameOverride: node-exporter
+  podLabels:
+    jobLabel: node-exporter
+  prometheus:
+    monitor:
+      enabled: true
+      relabelings:
+      - action: replace
+        regex: (.*)
+        replacement: $1
+        sourceLabels:
+        - __meta_kubernetes_pod_node_name
+        targetLabel: kubernetes_node
+  resources:
+    limits:
+      memory: 2048Mi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+  service:
+    portName: http-metrics
+prometheusOperator:
+  enabled: true
+  prometheusConfigReloader:
+    resources:
+      limits:
+        memory: 100Mi
+      requests:
+        cpu: 200m
+        memory: 50Mi
+thanosRuler:
+  enabled: false
