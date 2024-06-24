@@ -106,15 +106,15 @@ use "--debug" when running the below command
 >         - targets: ["52.14.138.83:9090"]
 > ```
 > 2. Create a ConfigMap for Additional Scrape Configurations
->    additional-scrape-configs.yaml
+>    `additional-scrape-configs.yaml`
 > 3. Apply the ConfigMap:
->    kubectl apply -f additional-scrape-configs.yaml
+>    `kubectl apply -f additional-scrape-configs.yaml`
 > 4. Reference the ConfigMap in the values.yaml file
->     additionalScrapeConfigs:
+> ```    additionalScrapeConfigs:
 >       name: prometheus-additional-scrape-configs
->       key: additional-scrape-configs.yaml
+>       key: additional-scrape-configs.yaml ```
 > 5. Apply the Helm Upgrade
->    helm upgrade prometheus stable/prometheus-operator -f values.yaml -n monitoring
+>    `helm upgrade prometheus stable/prometheus-operator -f values.yaml -n monitoring`
 > 
 
 
