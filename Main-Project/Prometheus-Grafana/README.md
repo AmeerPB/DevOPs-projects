@@ -1,6 +1,20 @@
 ## steps to configure Prometheus-Grafana on K8s
 
 
+### Reference 
+[Techno Tim YT video](https://www.youtube.com/watch?v=fzny5uUaAeY)
+
+### YT Video  Notes
+[Techno Tim Video Notes](https://technotim.live/posts/kube-grafana-prometheus/)
+
+
+
+
+
+
+> [!NOTE]
+> Steps - Working condition
+
 Official HELM [instalation page](https://helm.sh/docs/intro/install/)
 
 ```
@@ -80,11 +94,15 @@ use "--debug" when running the below command
 
 
 
-### Reference 
-[Techno Tim YT video](https://www.youtube.com/watch?v=fzny5uUaAeY)
 
-### YT Video  Notes
-[Techno Tim Video Notes](https://technotim.live/posts/kube-grafana-prometheus/)
+
+
+
+
+
+
+
+
 
 
 
