@@ -99,11 +99,12 @@ use "--debug" when running the below command
 > [!CAUTION]
 > Steps for adding 2nd scrape job for Node Exporter
 > 1. Add the additionalScrapeConfigs to the prometheus.prometheusSpec section in your values.yaml file:
-> 
+> ```
 >     additionalScrapeConfigs:
 >     - job_name: "worker_node"
 >       static_configs:
 >         - targets: ["52.14.138.83:9090"]
+> ```
 > 2. Create a ConfigMap for Additional Scrape Configurations
 >    additional-scrape-configs.yaml
 > 3. Apply the ConfigMap:
