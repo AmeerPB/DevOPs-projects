@@ -1,9 +1,9 @@
 ## worpress-sql-docker-stack
 
 > [!NOTE]
-
-1. Wordpress - Using Docker Stack.
-2. Both WordPress and MySQL on separate EBS volumes.
+> 
+> 1. Wordpress - Using Docker Stack.
+> 2. Both WordPress and MySQL on separate EBS volumes.
 
 
 > [!CAUTION]
